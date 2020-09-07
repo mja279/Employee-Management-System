@@ -22,34 +22,71 @@ function runEmployeeSearch() {
         type: "rawlist",
         message: "What would you like to do?",
         choices: [
-          "Find songs by artist",
-          "Find all artists who appear more than once",
-          "Find data within a specific range",
-          "Search for a specific song",
-          "Find artists with a top song and top album in the same year"
+          "View All Employees",
+          "View All Employees by Department",
+          "View All Employees by Manager",
+          "Add Employee",
+          "Remove Employee",
+          "Update Employee Role",
+          "Update Employee Manager"
         ]
-      })
+      },
+      console.log("Move up and down to reveal more choices"))
       .then(function(answer) {
         switch (answer.action) {
-        case "Find songs by artist":
-          artistSearch();
+        case "View All Employees":
+          employeeSearch();
           break;
   
-        case "Find all artists who appear more than once":
-          multiSearch();
+        case "View All Employees by Department":
+          byDepartmentSearch();
           break;
   
-        case "Find data within a specific range":
-          rangeSearch();
+        case "View All Employees by Manager":
+          byManagerSearch();
           break;
   
-        case "Search for a specific song":
-          songSearch();
+        case "Add Employee":
+          addEmployee();
           break;
   
-        case "Find artists with a top song and top album in the same year":
-          songAndAlbumSearch();
+        case "Update Employee Role":
+          updateEmployee();
+          break;
+        
+        case "Update Employee Manager":
+          updateManager();
           break;
         }
       });
   }
+
+function employeeSearch() {
+  var query = "SELECT * FROM employees";
+  connection.query(query, function(err, res) {
+    for (var i = 0; i < res.length; i++) {
+      console.log(res[i].first_name);
+    }
+    runEmployeeSearch();
+  });
+}
+
+function byDepartmentSearch() {
+  var query = "SELECT * FROM employees GROUP BY department";
+  connection.query(query, function(err, res) {
+    for (var i = 0; i < res.length; i++) {
+      console.log(res[i].department);
+    }
+    runEmployeeSearch();
+  });
+}
+
+function byManagerSearch() {
+  var query = "SELECT * FROM employees GROUP BY manager";
+  connection.query(query, function(err, res) {
+    for (var i = 0; i < res.length; i++) {
+      console.log(res[i].manager);
+    }
+    runEmployeeSearch();
+  });
+}
